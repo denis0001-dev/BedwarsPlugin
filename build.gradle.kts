@@ -32,7 +32,7 @@ dependencies {
 
 group = "ru.morozovit"
 version = "1.0-SNAPSHOT"
-description = "BedfightPlugin"
+description = "BedwarsPlugin"
 
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
