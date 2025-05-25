@@ -109,9 +109,18 @@ public class GameManager {
     }
 
     public static void resetMap() throws IOException {
-        File schem = new File(Bukkit.getServer().getPluginManager().getPlugin("BedfightPlugin").getDataFolder().getAbsolutePath() + "/map-1.schem");
+        @SuppressWarnings("DataFlowIssue")
+        File schem = new File(
+                Bukkit
+                        .getServer()
+                        .getPluginManager()
+                        .getPlugin("BedwarsPlugin")
+                        .getDataFolder()
+                        .getAbsolutePath() + "/map-1.schem"
+        );
         ClipboardFormat format = ClipboardFormats.findByFile(schem);
 
+        assert format != null;
         ClipboardReader reader = format.getReader(new FileInputStream(schem));
         Clipboard clipboard = reader.read();
 
@@ -136,7 +145,6 @@ public class GameManager {
         }
     }
 
-    @SuppressWarnings("InstantiationOfUtilityClass")
     public static void startGame() {
         Player[] players = Bukkit.getOnlinePlayers().toArray(new Player[0]);
 

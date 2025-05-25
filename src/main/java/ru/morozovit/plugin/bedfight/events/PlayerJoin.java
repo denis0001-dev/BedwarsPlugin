@@ -34,8 +34,7 @@ public class PlayerJoin implements Listener {
         event.getPlayer().teleport(waiting_room);
 
         setRandomTeam(event.getPlayer());
-        @SuppressWarnings("unchecked")
-        List<Player> notRunningPlayers = (List<Player>) Bukkit.getOnlinePlayers().stream().toList();
+        List<Player> notRunningPlayers = new java.util.ArrayList<>(Bukkit.getOnlinePlayers().stream().toList());
         for (Player player : players) {
             if (getStatKey(player,"inGame").equals("true")) {
                 try {
@@ -44,10 +43,7 @@ public class PlayerJoin implements Listener {
             }
         }
 
-
-
-
-        if (notRunningPlayers.toArray().length==2) {
+        if (notRunningPlayers.toArray().length == 2) {
             GameManager.startGame();
         }
     }

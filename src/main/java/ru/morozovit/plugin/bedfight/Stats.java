@@ -2,7 +2,6 @@ package ru.morozovit.plugin.bedfight;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,13 +10,15 @@ import java.util.Objects;
 import static ru.morozovit.plugin.bedfight.BedfightPlugin.config;
 
 public class Stats {
-    public static @Nullable Object getStatKey(@NotNull Player player, String key) {
+    public static Object getStatKey(@NotNull Player player, String key) {
         return getStatKey(player.getName(),key);
     }
-    public static @Nullable Object getStatKey(@NotNull String playerName,String key) {
+    public static Object getStatKey(@NotNull String playerName, String key) {
         try {
-            Object obj = config.getPlayers().get(playerName).get(key);
-            return Objects.requireNonNullElseGet(obj, Object::new);
+            return Objects.requireNonNullElseGet(
+                    config.getPlayers().get(playerName).get(key),
+                    Object::new
+            );
         } catch (NullPointerException e) {
             return new Object();
         }

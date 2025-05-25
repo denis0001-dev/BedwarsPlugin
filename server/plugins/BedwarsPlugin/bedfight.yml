@@ -1,0 +1,21 @@
+players:
+  structure: java.util.HashMap
+  type: java.util.HashMap
+  default:
+    structure: java.util.HashMap
+    type: java.lang.String
+    Default: 'true'
+  pr0gramm3r101:
+    structure: java.util.HashMap
+    type: java.lang.String
+    bed: 'true'
+    spectator: 'false'
+    inGame: 'true'
+    team: red
+  denis0001-dev:
+    structure: java.util.HashMap
+    type: java.lang.String
+    bed: 'true'
+    spectator: 'false'
+    inGame: 'true'
+    team: red

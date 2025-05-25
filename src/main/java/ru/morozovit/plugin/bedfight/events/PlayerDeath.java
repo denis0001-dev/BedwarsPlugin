@@ -75,7 +75,7 @@ public class PlayerDeath implements Listener {
                         killer.teleport(GameManager.waiting_room);
                     }
                 };
-                post.runTaskLater(JavaPlugin.getPlugin(BedfightPlugin.class),40);
+                post.runTaskLater(JavaPlugin.getPlugin(BedfightPlugin.class), 40);
             }
 
         }

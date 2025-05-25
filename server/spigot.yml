@@ -34,6 +34,8 @@ settings:
   moved-too-quickly-multiplier: 10.0
   netty-threads: 4
   attribute:
+    maxAbsorption:
+      max: 2048.0
     maxHealth:
       max: 2048.0
     movementSpeed:
@@ -55,6 +57,7 @@ commands:
   - summon
   - testforblock
   - tellraw
+  enable-spam-exclusions: false
 players:
   disable-saving: false
 config-version: 12
@@ -63,6 +66,7 @@ stats:
   forced-stats: {}
 world-settings:
   default:
+    unload-frozen-chunks: false
     below-zero-generation-in-existing-chunks: true
     view-distance: default
     simulation-distance: default
