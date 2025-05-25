@@ -1,0 +1,12 @@
+server/*
+!server/plugins
+.paper-remapped
+.archive-unpack
+server/plugins/WorldEdit/sessions
+server/plugins/WorldEdit/assets
+cache
+!server/server.jar
+!server/server.properties
+!server/start.sh
+!server/config
+!server/eula.txt

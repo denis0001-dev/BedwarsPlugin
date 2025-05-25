@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
-  <component name="FacetManager">
-    <facet type="minecraft" name="Minecraft">
-      <configuration>
-        <autoDetectTypes>
-          <platformType>SPIGOT</platformType>
-        </autoDetectTypes>
-        <projectReimportVersion>1</projectReimportVersion>
-      </configuration>
-    </facet>
+  <component name="AdditionalModuleElements">
+    <content url="file://$MODULE_DIR$" dumb="true">
+      <excludeFolder url="file://$MODULE_DIR$/server" />
+      <excludeFolder url="file://$MODULE_DIR$/server/cache" />
+      <excludeFolder url="file://$MODULE_DIR$/server/crash-reports" />
+      <excludeFolder url="file://$MODULE_DIR$/server/libraries" />
+      <excludeFolder url="file://$MODULE_DIR$/server/logs" />
+      <excludeFolder url="file://$MODULE_DIR$/server/plugins/.paper-remapped" />
+      <excludeFolder url="file://$MODULE_DIR$/server/versions" />
+      <excludeFolder url="file://$MODULE_DIR$/server/world" />
+      <excludeFolder url="file://$MODULE_DIR$/server/world_nether" />
+      <excludeFolder url="file://$MODULE_DIR$/server/world_the_end" />
+    </content>
   </component>
 </module>
