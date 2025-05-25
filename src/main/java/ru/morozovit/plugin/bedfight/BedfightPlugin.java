@@ -54,7 +54,6 @@ public final class BedfightPlugin extends JavaPlugin implements Listener {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {
-        //noinspection SwitchStatementWithTooFewBranches
         switch (cmd.getName()) {
             case "stat":
                 return ChangeStat.run(sender, cmd, label, args);

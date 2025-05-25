@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BedfightPlugin.iml" filepath="$PROJECT_DIR$/BedfightPlugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BedfightPlugin.iml" filepath="$PROJECT_DIR$/.idea/modules/BedfightPlugin.iml" />
     </modules>
   </component>
 </project>

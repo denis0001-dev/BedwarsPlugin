@@ -10,12 +10,12 @@ players:
     type: java.lang.String
     bed: 'true'
     spectator: 'false'
-    inGame: 'true'
+    inGame: 'false'
     team: red
   denis0001-dev:
     structure: java.util.HashMap
     type: java.lang.String
     bed: 'true'
     spectator: 'false'
-    inGame: 'true'
+    inGame: 'false'
     team: red
