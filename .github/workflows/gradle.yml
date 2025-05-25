@@ -22,5 +22,5 @@ jobs:
       uses: actions/upload-artifact@v4.6.2
       with:
         name: BedwarsPlugin
-        path: 'server/plugins/BedwarsPlugin-*.jar'
+        path: './server/plugins/BedwarsPlugin-*.jar'
         retention-days: 90

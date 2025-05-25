@@ -4,6 +4,7 @@ server/*
 .archive-unpack
 server/plugins/WorldEdit/sessions
 server/plugins/WorldEdit/assets
+server/plugins/BedwarsPlugin-*.jar
 cache
 !server/server.jar
 !server/server.properties
