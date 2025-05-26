@@ -5,6 +5,7 @@ server/*
 server/plugins/WorldEdit/sessions
 server/plugins/WorldEdit/assets
 server/plugins/BedwarsPlugin-*.jar
+server/plugins/BedwarsPlugin/bedfight.yml
 cache
 !server/server.jar
 !server/server.properties

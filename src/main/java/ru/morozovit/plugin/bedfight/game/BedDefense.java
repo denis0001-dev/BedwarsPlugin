@@ -36,9 +36,11 @@ public class BedDefense {
     };
 
     public static void generateBedDefense(World world, @NotNull Location coords) throws IOException {
-        File schem = new File(Bukkit.getServer().getPluginManager().getPlugin("BedfightPlugin").getDataFolder().getAbsolutePath() + "/bed_defense.schem");
+        @SuppressWarnings("DataFlowIssue")
+        File schem = new File(Bukkit.getServer().getPluginManager().getPlugin("BedwarsPlugin").getDataFolder().getAbsolutePath() + "/bed_defense.schem");
         ClipboardFormat format = ClipboardFormats.findByFile(schem);
 
+        assert format != null;
         ClipboardReader reader = format.getReader(new FileInputStream(schem));
         Clipboard clipboard = reader.read();
 
@@ -60,9 +62,8 @@ public class BedDefense {
             editSession.flushSession();
 
         } catch (WorldEditException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
-
-
     }
 }

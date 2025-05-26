@@ -4,7 +4,7 @@
 
 plugins {
     java
-    kotlin("jvm")
+    kotlin("jvm") version "2.1.21" // Kotlin version to use
 }
 
 repositories {
