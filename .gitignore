@@ -12,5 +12,9 @@ cache
 !server/config
 !server/eula.txt
 !server/world
+server/world/playerdata
+server/world/advancements
+server/world/stats
+server/world/session.lock
 .gradle
 build
