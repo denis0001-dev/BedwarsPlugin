@@ -1,0 +1,3 @@
+[submodule "lib/bukkit"]
+	path = lib/bukkit
+	url = https://hub.spigotmc.org/stash/scm/spigot/bukkit.git
