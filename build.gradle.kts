@@ -10,17 +10,9 @@ repositories {
     mavenLocal()
     mavenCentral()
 
-    maven {
-        url = uri("https://hub.spigotmc.org/nexus/content/repositories/public/")
-    }
-
-    maven {
-        url = uri("https://repo.mikigal.pl/releases")
-    }
-
-    maven {
-        url = uri("https://maven.enginehub.org/repo/")
-    }
+    maven("https://hub.spigotmc.org/nexus/content/repositories/public/")
+    maven("https://repo.mikigal.pl/releases")
+    maven("https://maven.enginehub.org/repo/")
 }
 
 dependencies {

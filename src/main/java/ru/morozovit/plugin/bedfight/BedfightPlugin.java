@@ -30,27 +30,25 @@ public final class BedfightPlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         config = ConfigAPI.init(
-                BedfightConfig.class,
-                NameStyle.UNDERSCORE,
-                CommentStyle.INLINE,
-                true,
-                this
+            BedfightConfig.class,
+            NameStyle.UNDERSCORE,
+            CommentStyle.INLINE,
+            true,
+            this
         );
         PluginManager pm = getServer().getPluginManager();
 
-        pm.registerEvents(playerDeathListener,this);
-        pm.registerEvents(playerRespawnListener,this);
-        pm.registerEvents(playerMoveListener,this);
-        pm.registerEvents(blockBreakListener,this);
-        pm.registerEvents(playerJoinListener,this);
+        pm.registerEvents(playerDeathListener, this);
+        pm.registerEvents(playerRespawnListener, this);
+        pm.registerEvents(playerMoveListener, this);
+        pm.registerEvents(blockBreakListener, this);
+        pm.registerEvents(playerJoinListener, this);
 
         logger.info("Plugin loaded");
-
     }
 
     @Override
-    public void onDisable() {
-    }
+    public void onDisable() {}
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String label, String[] args) {

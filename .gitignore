@@ -11,5 +11,6 @@ cache
 !server/start.sh
 !server/config
 !server/eula.txt
+!server/world
 .gradle
 build
