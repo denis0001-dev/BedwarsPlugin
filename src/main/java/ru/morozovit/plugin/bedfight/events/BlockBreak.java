@@ -2,6 +2,7 @@ package ru.morozovit.plugin.bedfight.events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.event.EventHandler;
@@ -41,10 +42,11 @@ public class BlockBreak implements Listener {
             for (String player : players) {
                 if (Objects.equals(getTeam(player), bedTeam) && !getStatKey(player, "bed").equals("false")) {
                     setStatKey(player, "bed", "false");
-                    try {
-                        Bukkit.getPlayer(player).sendTitle(BOLD + "" + RED + "BED DESTROYED!", WHITE + "You will no longer respawn!", 3, 20, 3);
-                        Bukkit.getPlayer(player).playSound(Bukkit.getPlayer(player).getLocation(), Sound.ENTITY_WITHER_DEATH, SoundCategory.MASTER, 1, 1);
-                    } catch (NullPointerException _) {}
+                    Player target = Bukkit.getPlayer(player);
+                    if (target != null) {
+                        target.sendTitle(BOLD + "" + RED + "BED DESTROYED!", WHITE + "You will no longer respawn!", 3, 20, 3);
+                        target.playSound(target.getLocation(), Sound.ENTITY_WITHER_DEATH, SoundCategory.MASTER, 1, 1);
+                    }
                 }
             }
         }

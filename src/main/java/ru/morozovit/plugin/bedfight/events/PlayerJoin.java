@@ -31,15 +31,14 @@ public class PlayerJoin implements Listener {
                 player.sendMessage(GREEN+event.getPlayer().getName()+AQUA+" joined the server!");
             }
         }
+        GameManager.ensureChunkLoaded(waiting_room);
         event.getPlayer().teleport(waiting_room);
 
         setRandomTeam(event.getPlayer());
-        List<Player> notRunningPlayers = new java.util.ArrayList<>(Bukkit.getOnlinePlayers().stream().toList());
+        List<Player> notRunningPlayers = new java.util.ArrayList<>(Bukkit.getOnlinePlayers());
         for (Player player : players) {
             if (getStatKey(player,"inGame").equals("true")) {
-                try {
-                    notRunningPlayers.remove(player);
-                } catch (UnsupportedOperationException _) {}
+                notRunningPlayers.remove(player);
             }
         }
 

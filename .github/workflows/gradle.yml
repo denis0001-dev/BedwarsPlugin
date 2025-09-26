@@ -2,25 +2,30 @@ name: Build
 
 on:
   push:
+    branches: [ main ]
+  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout sources
-      uses: actions/checkout@v4
-    - name: Setup Java
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'corretto'
-        java-version: 23
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@v4
-    - name: Build with Gradle
-      run: ./gradlew jar
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4.6.2
-      with:
-        name: BedwarsPlugin
-        path: './server/plugins/BedwarsPlugin-*.jar'
-        retention-days: 90
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v3
+        with:
+          arguments: clean jar --stacktrace
+      - name: Enforce jar size budget
+        run: |
+          JAR=$(ls server/plugins/BedwarsPlugin-*.jar)
+          SIZE=$(stat -c%s "$JAR")
+          echo "Jar size: $SIZE bytes"
+          MAX=$((200 * 1024))
+          if [ "$SIZE" -gt "$MAX" ]; then
+            echo "Jar exceeds budget ($MAX bytes)" >&2
+            exit 1
+          fi

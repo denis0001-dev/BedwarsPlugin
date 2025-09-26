@@ -4,7 +4,6 @@
 
 plugins {
     java
-    kotlin("jvm") version "2.1.21" // Kotlin version to use
 }
 
 repositories {
@@ -27,8 +26,11 @@ group = "ru.morozovit"
 version = "1.0-SNAPSHOT"
 description = "BedwarsPlugin"
 
+// Use system JDK; ensure it's compatible with Spigot target
+
 tasks.withType<JavaCompile> {
     options.encoding = "UTF-8"
+    options.compilerArgs.addAll(listOf("-g:none"))
 }
 
 tasks.withType<Javadoc> {
@@ -37,13 +39,13 @@ tasks.withType<Javadoc> {
 
 
 tasks.withType<Jar> {
+    // Create a fat jar only for implementation deps (ConfigAPI). compileOnly deps are excluded.
     from(
         configurations.runtimeClasspath
-        .get()
-        .files
-        .map { if (it.isDirectory) it else zipTree(it) }
+            .get()
+            .files
+            .map { if (it.isDirectory) it else zipTree(it) }
     )
-
     destinationDirectory = file("server/plugins")
 }
 

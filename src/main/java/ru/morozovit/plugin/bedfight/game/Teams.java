@@ -18,7 +18,7 @@ import static ru.morozovit.plugin.bedfight.Stats.setStatKey;
 import static ru.morozovit.util.Random.randomNumber;
 
 public class Teams {
-    private static final World overworld = getWorlds().getFirst();
+    private static final World overworld = getWorlds().get(0);
 
     public static final String BLUE = "blue";
     public static final String RED = "red";

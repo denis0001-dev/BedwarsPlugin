@@ -24,7 +24,7 @@ import java.io.IOException;
 import static org.bukkit.Bukkit.getWorlds;
 
 public class BedDefense {
-    private static final World overworld = getWorlds().getFirst();
+    private static final World overworld = getWorlds().get(0);
 
     public static final Location[] blue_bed = new Location[] {
             new Location(overworld,117.0,8.0,38.0),
@@ -35,14 +35,18 @@ public class BedDefense {
             new Location(overworld,163.0,8.0,30.0)
     };
 
-    public static void generateBedDefense(World world, @NotNull Location coords) throws IOException {
-        @SuppressWarnings("DataFlowIssue")
-        File schem = new File(Bukkit.getServer().getPluginManager().getPlugin("BedwarsPlugin").getDataFolder().getAbsolutePath() + "/bed_defense.schem");
-        ClipboardFormat format = ClipboardFormats.findByFile(schem);
-
-        assert format != null;
-        ClipboardReader reader = format.getReader(new FileInputStream(schem));
-        Clipboard clipboard = reader.read();
+    private static Clipboard cachedBedDefenseClipboard;
+    public static synchronized void generateBedDefense(World world, @NotNull Location coords) throws IOException {
+        if (cachedBedDefenseClipboard == null) {
+            @SuppressWarnings("DataFlowIssue")
+            File schem = new File(Bukkit.getServer().getPluginManager().getPlugin("BedwarsPlugin").getDataFolder().getAbsolutePath() + "/bed_defense.schem");
+            ClipboardFormat format = ClipboardFormats.findByFile(schem);
+            assert format != null;
+            try (FileInputStream fis = new FileInputStream(schem); ClipboardReader reader = format.getReader(fis)) {
+                cachedBedDefenseClipboard = reader.read();
+            }
+        }
+        Clipboard clipboard = cachedBedDefenseClipboard;
 
         try {
             com.sk89q.worldedit.world.World adaptedWorld = BukkitAdapter.adapt(world);
@@ -53,6 +57,8 @@ public class BedDefense {
             double x = coords.getX()-1;
             double y = coords.getY()+3;
             double z = coords.getZ();
+
+            world.getChunkAt((int) x >> 4, (int) z >> 4).load(true);
 
 
             Operation operation = new ClipboardHolder(clipboard).createPaste(editSession).to(BlockVector3.at(x,y,z)).ignoreAirBlocks(true).build();

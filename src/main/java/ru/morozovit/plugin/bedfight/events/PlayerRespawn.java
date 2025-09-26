@@ -35,20 +35,22 @@ public class PlayerRespawn implements Listener {
         p.setAllowFlight(true);
         p.setFlying(true);
 
-        Runnable task = () -> {
-            for (int i=5;i>0;i--) {
-                p.sendTitle(BOLD+""+RED+"YOU DIED!",YELLOW+"You will respawn in %s seconds!".formatted(RED+""+ i +YELLOW),3,20,3);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException _) {
+        new BukkitRunnable() {
+            int secondsRemaining = 5;
+
+            @Override
+            public void run() {
+                if (secondsRemaining <= 0) {
+                    p.sendTitle(BOLD+""+GREEN+"RESPAWNED!","",3,40,3);
+                    p.setFlying(false);
+                    p.setAllowFlight(false);
+                    cancel();
+                    return;
                 }
+                p.sendTitle(BOLD+""+RED+"YOU DIED!",YELLOW+"You will respawn in %s seconds!".formatted(RED+""+ secondsRemaining +YELLOW),3,20,3);
+                secondsRemaining--;
             }
-            p.sendTitle(BOLD+""+GREEN+"RESPAWNED!","",3,40,3);
-            p.setFlying(false);
-            p.setAllowFlight(false);
-        };
-        Thread t = new Thread(task);
-        t.start();
+        }.runTaskTimer(JavaPlugin.getPlugin(BedfightPlugin.class), 0L, 20L);
         BukkitRunnable post = new BukkitRunnable() {
             @Override
             public void run() {

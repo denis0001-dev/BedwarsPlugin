@@ -39,9 +39,16 @@ public class GameManager {
     @SuppressWarnings("FieldMayBeFinal")
     private static Set<String> runningPlayers = new HashSet<>();
 
-    private static final World overworld = getWorlds().getFirst();
+    private static final World overworld = getWorlds().get(0);
 
     public static final Location waiting_room = new Location(overworld,143.5,27,34.5);
+
+    public static void ensureChunkLoaded(@NotNull Location location) {
+        org.bukkit.Chunk chunk = location.getChunk();
+        if (!chunk.isLoaded()) {
+            chunk.load(true);
+        }
+    }
 
     public static Set<String> getRunningPlayers() {
         updatePlayers();
@@ -60,28 +67,30 @@ public class GameManager {
     }
 
     public static void gameCountdown(Player target) {
-        Runnable task = () -> {
-            for (int i = 5; i > 0; i--) {
-                target.sendTitle((i <= 3 ? RED : GOLD) + String.valueOf(i), "", 3, 20, 3);
-                target.playNote(target.getLocation(), Instrument.STICKS,new Note(12));
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException _) {
+        new BukkitRunnable() {
+            int secondsRemaining = 5;
+
+            @Override
+            public void run() {
+                if (secondsRemaining <= 0) {
+                    cancel();
+                    return;
                 }
+                target.sendTitle((secondsRemaining <= 3 ? RED : GOLD) + String.valueOf(secondsRemaining), "", 3, 20, 3);
+                target.playNote(target.getLocation(), Instrument.STICKS,new Note(12));
+                secondsRemaining--;
             }
-        };
-        Thread t = new Thread(task);
-        t.start();
+        }.runTaskTimer(JavaPlugin.getPlugin(BedfightPlugin.class), 0L, 20L);
     }
 
     public static void putPlayerToPlace(@NotNull Player target) {
-        target.teleport(
-                switch (getTeam(target)) {
-                    case Teams.BLUE -> BLUE_SPAWN;
-                    case Teams.RED -> RED_SPAWN;
-                    default -> waiting_room;
-                }
-        );
+        Location destination = switch (getTeam(target)) {
+            case Teams.BLUE -> BLUE_SPAWN;
+            case Teams.RED -> RED_SPAWN;
+            default -> waiting_room;
+        };
+        ensureChunkLoaded(destination);
+        target.teleport(destination);
     }
 
     public static void applyKit(@NotNull Player target) {
@@ -108,31 +117,37 @@ public class GameManager {
         setStatKey(target,"spectator","false");
     }
 
-    public static void resetMap() throws IOException {
-        @SuppressWarnings("DataFlowIssue")
-        File schem = new File(
-                Bukkit
-                        .getServer()
-                        .getPluginManager()
-                        .getPlugin("BedwarsPlugin")
-                        .getDataFolder()
-                        .getAbsolutePath() + "/map-1.schem"
-        );
-        ClipboardFormat format = ClipboardFormats.findByFile(schem);
-
-        assert format != null;
-        ClipboardReader reader = format.getReader(new FileInputStream(schem));
-        Clipboard clipboard = reader.read();
+    private static Clipboard cachedMapClipboard;
+    public static synchronized void resetMap() throws IOException {
+        if (cachedMapClipboard == null) {
+            @SuppressWarnings("DataFlowIssue")
+            File schem = new File(
+                    Bukkit
+                            .getServer()
+                            .getPluginManager()
+                            .getPlugin("BedwarsPlugin")
+                            .getDataFolder()
+                            .getAbsolutePath() + "/map-1.schem"
+            );
+            ClipboardFormat format = ClipboardFormats.findByFile(schem);
+            assert format != null;
+            try (FileInputStream fis = new FileInputStream(schem); ClipboardReader reader = format.getReader(fis)) {
+                cachedMapClipboard = reader.read();
+            }
+        }
+        Clipboard clipboard = cachedMapClipboard;
 
         try {
             com.sk89q.worldedit.world.World adaptedWorld = BukkitAdapter.adapt(overworld);
 
-            @SuppressWarnings("deprecation")
-            EditSession session = WorldEdit.getInstance().getEditSessionFactory().getEditSession(adaptedWorld,-1);
-
             double x = 146;
             double y = 15;
             double z = 49;
+
+            overworld.getChunkAt((int) x >> 4, (int) z >> 4).load(true);
+
+            @SuppressWarnings("deprecation")
+            EditSession session = WorldEdit.getInstance().getEditSessionFactory().getEditSession(adaptedWorld,-1);
 
             Operation operation = new ClipboardHolder(clipboard).createPaste(session).to(BlockVector3.at(x,y,z)).ignoreAirBlocks(false).build();
 
@@ -149,16 +164,16 @@ public class GameManager {
         Player[] players = Bukkit.getOnlinePlayers().toArray(new Player[0]);
 
         // Teams.allocateTeams();
+        try {
+            resetMap();
+            generateBedDefense(overworld,blue_bed[0]);
+            generateBedDefense(overworld,red_bed[0]);
+        } catch (IOException e) {
+            Bukkit.broadcastMessage(RED+"An error occurred while resetting");
+        }
+
         for (Player player : players) {
             runningPlayers.add(player.getName());
-
-            try {
-                resetMap();
-                generateBedDefense(overworld,blue_bed[0]);
-                generateBedDefense(overworld,red_bed[0]);
-            } catch (IOException e) {
-                Bukkit.broadcastMessage(RED+"An error occurred wlilist resetting");
-            }
             player.setGameMode(GameMode.SURVIVAL);
             gameCountdown(player);
             BukkitRunnable post = new BukkitRunnable() {
